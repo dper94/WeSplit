@@ -14,14 +14,14 @@ struct ContentView: View {
     @FocusState private var checkAmountIsFocused: Bool
 
     let currencyFormatter: FloatingPointFormatStyle<Double>.Currency = .currency(code: Locale.current.currency?.identifier ?? "USD")
-    var totalPerPerson: (amountPerPerson: Double, grandTotal: Double) {
+    var totalPerPerson: (amountPerPerson: Double, grandTotal: Double, tipSelection: Double) {
         let peopleCount = Double(numberOfPeople + 2)
         let tipSelection = Double(tipPercentage)
         let tipValue = checkAmount / 100 * tipSelection
         let grandTotal = checkAmount + tipValue
         let amountPerPerson = grandTotal / peopleCount
 
-        return (amountPerPerson, grandTotal)
+        return (amountPerPerson, grandTotal, tipSelection)
     }
 
     var body: some View {
@@ -50,6 +50,7 @@ struct ContentView: View {
                     Text(totalPerPerson.grandTotal, format: currencyFormatter)
                 } header: {
                     Text("Total amount")
+                        .foregroundColor(totalPerPerson.tipSelection == 0 ? .red : .secondary)
                 }
                 Section {
                     Text(totalPerPerson.amountPerPerson, format: currencyFormatter)
